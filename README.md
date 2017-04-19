@@ -53,7 +53,7 @@
 To integrate DataCompression into your Xcode project using CocoaPods, add it to your `Podfile`:
 
 ```ruby
-target '<target name>' do
+target '<your_target_name>' do
     pod 'DataCompression'
 end
 ```
@@ -64,9 +64,32 @@ Then, run the following command:
 $ pod install
 ```
 
+You then will need to add `import DataCompression` at the top of your swift source files to use the extension.
+
+
 #### Swift Package Manager
 
-TODO
+To integrate DataCompression into your Xcode project using the swift package manager, add it as a dependency to your `Package.swift` file:
+
+```swift
+import PackageDescription
+
+let package = Package(
+    name: "<your_package_name>",
+    dependencies: [
+        .Package(url: "https://github.com/mw99/DataCompression.git", majorVersion: 2)
+    ]
+)
+```
+
+You then will need to add `import DataCompression` at the top of your swift source files to use the extension.
+
+The next time you run `swift build`, the new dependencies will be resolved. Since the swift package manager still does not allow packages to define their minimum deployment target, you will have to define these on the command line. I expect this to be fixed in a future release of the swift package manager.
+
+```bash
+$ swift build -Xswiftc -target -Xswiftc x86_64-apple-macosx10.11
+```
+
 
 #### Or just copy the file into your project
 

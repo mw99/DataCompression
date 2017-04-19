@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "DataCompression"
-  s.version      = "2.0.0"
+  s.version      = "2.0.1"
   s.summary      = "Swift libcompression wrapper as an extension for the Data type (ZLIB, LZFSE, LZMA, LZ4, deflate, RFC-1950, RFC-1951)"
   s.authors      = "Markus Wanke"
   s.homepage     = "https://github.com/mw99/DataCompression"

@@ -48,19 +48,29 @@
 
 ## Install
 
-##### Cocoa Pods
+#### Cocoa Pods
+
+To integrate DataCompression into your Xcode project using CocoaPods, add it to your `Podfile`:
+
+```ruby
+target '<target name>' do
+    pod 'DataCompression'
+end
+```
+
+Then, run the following command:
+
+```bash
+$ pod install
+```
+
+#### Swift Package Manager
 
 TODO
 
-##### Swift Package Manager
-
-TODO
-
-##### Or just copy the file into your project
+#### Or just copy the file into your project
 
 You only need one file located in `Sources/DataCompression.swift`. Drag and drop it into the Xcode project navigator.
-
-
 
 
 

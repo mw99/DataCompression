@@ -30,9 +30,9 @@ class CompressionTest: XCTestCase
     func testRandomDataChunks()
     {
         for i in 1...500 {
-            let ints = [UInt32](repeating: 0, count: i).map { _ in arc4random() }
+            let ints = [UInt32](repeating: 0, count: 1 + (i / 4)).map { _ in arc4random() }
             let data = Data(bytes: ints, count: i)
-            XCTAssertEqual(data, comp(data), "Fails with random data :(")
+            XCTAssertEqual(data, comp(data), "Fails with random data (\(data.count) bytes) :(")
         }
     }
 
@@ -40,8 +40,8 @@ class CompressionTest: XCTestCase
     {
         let b = 1024 * 1024 * 15 // 15 MB
         let ints = [UInt32](repeating: 0, count: b / 4).map { _ in arc4random() }
-        let data = Data(bytes: ints, count: b / 4)
-        XCTAssertEqual(data, comp(data), "Fails with random data (\(b) bytes) :(")
+        let data = Data(bytes: ints, count: b)
+        XCTAssertEqual(data, comp(data), "Fails with random data large blob of 15 MB :(")
     }
 
     func comp(_ d: Data?) -> Data?

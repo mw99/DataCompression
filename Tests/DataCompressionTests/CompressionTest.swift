@@ -49,22 +49,34 @@ class CompressionTest: XCTestCase
         var tmp: Data? = d
 
         tmp = tmp?.deflate()
+        XCTAssertNotNil(tmp, "deflate() failed")
         tmp = tmp?.inflate()
+        XCTAssertNotNil(tmp, "inflate() failed")
 
         tmp = tmp?.zip()
+        XCTAssertNotNil(tmp, "zip() failed")
         tmp = tmp?.unzip()
+        XCTAssertNotNil(tmp, "unzip() failed")
 
-        tmp = tmp?.compress(withAlgorithm: .LZFSE)
-        tmp = tmp?.decompress(withAlgorithm: .LZFSE)
+        tmp = tmp?.gzip()
+        XCTAssertNotNil(tmp, "gzip() failed")
+        tmp = tmp?.gunzip()
+        XCTAssertNotNil(tmp, "gunzip() failed")
 
-        tmp = tmp?.compress(withAlgorithm: .LZ4)
-        tmp = tmp?.decompress(withAlgorithm: .LZ4)
+        tmp = tmp?.compress(withAlgorithm: .lzfse)
+        XCTAssertNotNil(tmp, "compress .lzfse() failed")
+        tmp = tmp?.decompress(withAlgorithm: .lzfse)
+        XCTAssertNotNil(tmp, "decompress .lzfse() failed")
 
-        tmp = tmp?.compress(withAlgorithm: .LZMA)
-        tmp = tmp?.decompress(withAlgorithm: .LZMA)
+        tmp = tmp?.compress(withAlgorithm: .lz4)
+        XCTAssertNotNil(tmp, "compress .lz4() failed")
+        tmp = tmp?.decompress(withAlgorithm: .lz4)
+        XCTAssertNotNil(tmp, "decompress .lz4() failed")
 
-        tmp = tmp?.compress(withAlgorithm: .ZLIB)
-        tmp = tmp?.decompress(withAlgorithm: .ZLIB)
+        tmp = tmp?.compress(withAlgorithm: .lzma)
+        XCTAssertNotNil(tmp, "compress .lzma() failed")
+        tmp = tmp?.decompress(withAlgorithm: .lzma)
+        XCTAssertNotNil(tmp, "decompress .lzma() failed")
 
         return tmp
     }
@@ -78,4 +90,23 @@ class CompressionTest: XCTestCase
         return String(data: res, encoding: .utf8)
     }
 
+    func testAdler32()
+    {
+        var adler = Adler32()
+        XCTAssertEqual(adler.checksum, 0x1)
+        adler.advance(withChunk: "The quick brown ".data(using: .ascii)!)
+        adler.advance(withChunk: "fox jumps over ".data(using: .ascii)!)
+        adler.advance(withChunk: "the lazy dog.".data(using: .ascii)!)
+        XCTAssertEqual(adler.checksum, 0x6be41008)
+    }
+
+    func testCrc32()
+    {
+        var crc = Crc32()
+        XCTAssertEqual(crc.checksum, 0x0)
+        crc.advance(withChunk: "The quick brown ".data(using: .ascii)!)
+        crc.advance(withChunk: "fox jumps over ".data(using: .ascii)!)
+        crc.advance(withChunk: "the lazy dog.".data(using: .ascii)!)
+        XCTAssertEqual(crc.checksum, 0x519025e9)
+    }
 }

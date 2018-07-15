@@ -7,5 +7,7 @@ extension CompressionTest
         ("testAsciiNumbers", testAsciiNumbers),
         ("testRandomDataChunks", testRandomDataChunks),
         ("testRandomDataBlob", testRandomDataBlob),
+        ("testAdler32", testAdler32),
+        ("testCrc32", testCrc32),
     ]
 }

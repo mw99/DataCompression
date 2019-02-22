@@ -59,8 +59,8 @@ assert(data == inflated)
 ##### Data in gzip format ([RFC-1952](https://www.ietf.org/rfc/rfc1952.txt)) can be handled with `.gzip()` and `.gunzip()`
 ```
 let data: Data! = "https://www.ietf.org/rfc/rfc1952.txt".data(using: .utf8)
-let gzipped: Data! = data.zip()
-let gunzipped: Data? = gzipped.unzip()
+let gzipped: Data! = data.gzip()
+let gunzipped: Data? = gzipped.gunzip()
 assert(data == gunzipped)
 ```
 *Note: Compressed data in gzip format will always be 18 bytes larger than raw deflated data and will append/perform a crc32 checksum based data integrity test .*

@@ -35,7 +35,7 @@ public extension Data
     /// Compresses the data.
     /// - parameter withAlgorithm: Compression algorithm to use. See the `CompressionAlgorithm` type
     /// - returns: compressed data
-    public func compress(withAlgorithm algo: CompressionAlgorithm) -> Data?
+    func compress(withAlgorithm algo: CompressionAlgorithm) -> Data?
     {
         return self.withUnsafeBytes { (sourcePtr: UnsafePointer<UInt8>) -> Data? in
             let config = (operation: COMPRESSION_STREAM_ENCODE, algorithm: algo.lowLevelType)
@@ -46,7 +46,7 @@ public extension Data
     /// Decompresses the data.
     /// - parameter withAlgorithm: Compression algorithm to use. See the `CompressionAlgorithm` type
     /// - returns: decompressed data
-    public func decompress(withAlgorithm algo: CompressionAlgorithm) -> Data?
+    func decompress(withAlgorithm algo: CompressionAlgorithm) -> Data?
     {
         return self.withUnsafeBytes { (sourcePtr: UnsafePointer<UInt8>) -> Data? in
             let config = (operation: COMPRESSION_STREAM_DECODE, algorithm: algo.lowLevelType)
@@ -60,7 +60,7 @@ public extension Data
     /// lzfse : Apples custom Lempel-Ziv style compression algorithm. Claims to compress as good as zlib but 2 to 3 times faster.
     /// lzma  : Horribly slow. Compression as well as decompression. Compresses better than zlib though.
     /// lz4   : Fast, but compression rate is very bad. Apples lz4 implementation often to not compress at all.
-    public enum CompressionAlgorithm
+    enum CompressionAlgorithm
     {
         case zlib
         case lzfse
@@ -71,7 +71,7 @@ public extension Data
     /// Compresses the data using the zlib deflate algorithm.
     /// - returns: raw deflated data according to [RFC-1951](https://tools.ietf.org/html/rfc1951).
     /// - note: Fixed at compression level 5 (best trade off between speed and time)
-    public func deflate() -> Data?
+    func deflate() -> Data?
     {
         return self.withUnsafeBytes { (sourcePtr: UnsafePointer<UInt8>) -> Data? in
             let config = (operation: COMPRESSION_STREAM_ENCODE, algorithm: COMPRESSION_ZLIB)
@@ -82,7 +82,7 @@ public extension Data
     /// Decompresses the data using the zlib deflate algorithm. Self is expected to be a raw deflate
     /// stream according to [RFC-1951](https://tools.ietf.org/html/rfc1951).
     /// - returns: uncompressed data
-    public func inflate() -> Data?
+    func inflate() -> Data?
     {
         return self.withUnsafeBytes { (sourcePtr: UnsafePointer<UInt8>) -> Data? in
             let config = (operation: COMPRESSION_STREAM_DECODE, algorithm: COMPRESSION_ZLIB)
@@ -93,7 +93,7 @@ public extension Data
     /// Compresses the data using the deflate algorithm and makes it comply to the zlib format.
     /// - returns: deflated data in zlib format [RFC-1950](https://tools.ietf.org/html/rfc1950)
     /// - note: Fixed at compression level 5 (best trade off between speed and time)
-    public func zip() -> Data?
+    func zip() -> Data?
     {
         let header = Data(bytes: [0x78, 0x5e])
         
@@ -113,7 +113,7 @@ public extension Data
     /// Decompresses the data using the zlib deflate algorithm. Self is expected to be a zlib deflate
     /// stream according to [RFC-1950](https://tools.ietf.org/html/rfc1950).
     /// - returns: uncompressed data
-    public func unzip(skipCheckSumValidation: Bool = true) -> Data?
+    func unzip(skipCheckSumValidation: Bool = true) -> Data?
     {
         // 2 byte header + 4 byte adler32 checksum
         let overhead = 6
@@ -151,7 +151,7 @@ public extension Data
     /// Compresses the data using the deflate algorithm and makes it comply to the gzip stream format.
     /// - returns: deflated data in gzip format [RFC-1952](https://tools.ietf.org/html/rfc1952)
     /// - note: Fixed at compression level 5 (best trade off between speed and time)
-    public func gzip() -> Data?
+    func gzip() -> Data?
     {
         var header = Data(bytes: [0x1f, 0x8b, 0x08, 0x00]) // magic, magic, deflate, noflags
         
@@ -181,7 +181,7 @@ public extension Data
     /// Decompresses the data using the gzip deflate algorithm. Self is expected to be a gzip deflate
     /// stream according to [RFC-1952](https://tools.ietf.org/html/rfc1952).
     /// - returns: uncompressed data
-    public func gunzip() -> Data?
+    func gunzip() -> Data?
     {
         // 10 byte header + data +  8 byte footer. See https://tools.ietf.org/html/rfc1952#section-2
         let overhead = 10 + 8
@@ -247,7 +247,7 @@ public extension Data
     
     /// Calculate the Adler32 checksum of the data.
     /// - returns: Adler32 checksum type. Can still be further advanced.
-    public func adler32() -> Adler32
+    func adler32() -> Adler32
     {
         var res = Adler32()
         res.advance(withChunk: self)
@@ -256,7 +256,7 @@ public extension Data
     
     /// Calculate the Crc32 checksum of the data.
     /// - returns: Crc32 checksum type. Can still be further advanced.
-    public func crc32() -> Crc32
+    func crc32() -> Crc32
     {
         var res = Crc32()
         res.advance(withChunk: self)

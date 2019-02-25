@@ -21,7 +21,7 @@
 #### Swift version support
 | Library Version | Swift Version |
 |-----------------|---------------|
-| 3.2.0           | 5.0           |
+| 3.2.0 -> 3.3.0  | 5.0           |
 | 3.1.0           | 4.2           |
 | 3.0.0           | 3.0 -> 4.1    |
 | 2.0.1           | < 3.0         |
@@ -134,6 +134,30 @@ $ pod install
 You then will need to add `import DataCompression` at the top of your swift source files to use the extension.
 
 
+#### Carthage
+
+**Note:** DataCompression versions < 3.3.0 are not compatible with carthage. That means Swift 5 only.
+
+To integrate DataCompression into your Xcode project using Carthage, add it as a dependency to your `Cartfile`. Just add:
+```
+github "mw99/DataCompression"
+```
+
+You will then have to add the framework paths in the `carthage copy-frameworks` run script phase of your Xcode project.
+The paths may differ depending on you have setup your project in relation to Carthage.
+
+##### Input:
+```
+$(SRCROOT)/Carthage/Build/iOS/DataCompression.framework
+```
+##### Output:
+```
+$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/DataCompression.framework
+```
+
+You then will need to add `import DataCompression` at the top of your swift source files to use the extension.
+
+
 #### Swift Package Manager
 
 To integrate DataCompression into your Xcode project using the swift package manager, add it as a dependency to your `Package.swift` file:
@@ -164,6 +188,9 @@ You only need one file located at `Sources/DataCompression.swift`. Drag and drop
 
 
 ## Change log / Upgrading guide
+
+##### Version `3.2.0` to `3.3.0`
+- Added support for Carthage
 
 ##### Version `3.1.0` to `3.2.0`
 - Podspec swift version set to **5.0**

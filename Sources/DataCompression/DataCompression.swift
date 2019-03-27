@@ -95,7 +95,7 @@ public extension Data
     /// - note: Fixed at compression level 5 (best trade off between speed and time)
     func zip() -> Data?
     {
-        let header = Data(bytes: [0x78, 0x5e])
+        let header = Data([0x78, 0x5e])
         
         let deflated = self.withUnsafeBytes { (sourcePtr: UnsafePointer<UInt8>) -> Data? in
             let config = (operation: COMPRESSION_STREAM_ENCODE, algorithm: COMPRESSION_ZLIB)
@@ -153,7 +153,7 @@ public extension Data
     /// - note: Fixed at compression level 5 (best trade off between speed and time)
     func gzip() -> Data?
     {
-        var header = Data(bytes: [0x1f, 0x8b, 0x08, 0x00]) // magic, magic, deflate, noflags
+        var header = Data([0x1f, 0x8b, 0x08, 0x00]) // magic, magic, deflate, noflags
         
         var unixtime = UInt32(Date().timeIntervalSince1970).littleEndian
         header.append(Data(bytes: &unixtime, count: MemoryLayout<UInt32>.size))
@@ -433,8 +433,15 @@ public struct Adler32: CustomStringConvertible
 
 
 
-
-
+extension Data
+{
+    func withUnsafeBytes<ResultType, ContentType>(_ body: (UnsafePointer<ContentType>) throws -> ResultType) rethrows -> ResultType
+    {
+        return try self.withUnsafeBytes({ (rawBufferPointer: UnsafeRawBufferPointer) -> ResultType in
+            return try body(rawBufferPointer.bindMemory(to: ContentType.self).baseAddress!)
+        })
+    }
+}
 
 fileprivate extension Data.CompressionAlgorithm
 {

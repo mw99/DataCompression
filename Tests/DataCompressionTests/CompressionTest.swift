@@ -9,6 +9,11 @@ class CompressionTest: XCTestCase
     {
         XCTAssertEqual("", pray(""))
     }
+
+    func testEmptyData()
+    {
+        XCTAssertEqual(Data(), comp(Data()))
+    }
     
     func testMiscSmall()
     {

@@ -1,9 +1,10 @@
-// swift-tools-version:4.0
+// swift-tools-version:5.0
 
 import PackageDescription
 
 let package = Package(
     name: "DataCompression",
+    platforms: [.macOS(.v10_11)],
     products: [
         .library(
             name: "DataCompression",

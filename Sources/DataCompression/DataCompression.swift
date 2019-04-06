@@ -481,7 +481,11 @@ fileprivate func perform(_ config: Config, source: UnsafePointer<UInt8>, sourceS
     stream.src_size = sourceSize
     
     var res = preload
-    let flags: Int32 = Int32(COMPRESSION_STREAM_FINALIZE.rawValue)
+
+    // When encoding, set flags to COMPRESSION_STREAM_ENCODE to ensure the whole buffer is consumed.
+    // When decoding, set flags to 0, else decoding will fail in some situations
+    // (see https://github.com/mw99/DataCompression/issues/17 ).
+    let flags: Int32 = config.operation == COMPRESSION_STREAM_ENCODE ? Int32(COMPRESSION_STREAM_FINALIZE.rawValue) : 0
     
     while true {
         switch compression_stream_process(&stream, flags) {

@@ -21,7 +21,7 @@
 #### Swift version support
 | Library Version | Swift Version |
 |-----------------|---------------|
-| 3.4.0           | 5.0           |
+| 3.5.0           | 5.0           |
 | 3.1.0           | 4.2           |
 | 3.0.0           | 3.0 -> 4.1    |
 | 2.0.1           | < 3.0         |
@@ -189,6 +189,9 @@ You only need one file located at `Sources/DataCompression.swift`. Drag and drop
 
 ## Change log / Upgrading guide
 
+
+##### Version `3.4.0` to `3.5.0`
+- Fix that prevents a bug in Apples lzfse compressor when working with large chunks of data.
 
 ##### Version `3.3.0` to `3.4.0`
 - Swift 5 release had further deprecation warnings than in the Swift 5 beta. Fixed.

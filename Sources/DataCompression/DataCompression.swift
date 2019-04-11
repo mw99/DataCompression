@@ -56,7 +56,7 @@ public extension Data
     
     /// Please consider the [libcompression documentation](https://developer.apple.com/reference/compression/1665429-data_compression)
     /// for further details. Short info:
-    /// zlib  : Aka deflate. Fast with a good compression rate. Proved itself ofer time and is supported everywhere.
+    /// zlib  : Aka deflate. Fast with a good compression rate. Proved itself over time and is supported everywhere.
     /// lzfse : Apples custom Lempel-Ziv style compression algorithm. Claims to compress as good as zlib but 2 to 3 times faster.
     /// lzma  : Horribly slow. Compression as well as decompression. Compresses better than zlib though.
     /// lz4   : Fast, but compression rate is very bad. Apples lz4 implementation often to not compress at all.
@@ -433,7 +433,7 @@ public struct Adler32: CustomStringConvertible
 
 
 
-extension Data
+fileprivate extension Data
 {
     func withUnsafeBytes<ResultType, ContentType>(_ body: (UnsafePointer<ContentType>) throws -> ResultType) rethrows -> ResultType
     {
@@ -470,8 +470,21 @@ fileprivate func perform(_ config: Config, source: UnsafePointer<UInt8>, sourceS
     let status = compression_stream_init(&stream, config.operation, config.algorithm)
     guard status != COMPRESSION_STATUS_ERROR else { return nil }
     defer { compression_stream_destroy(&stream) }
-    
-    let bufferSize = Swift.max( Swift.min(sourceSize, 64 * 1024), 64)
+
+    var result = preload
+    var flags: Int32 = Int32(COMPRESSION_STREAM_FINALIZE.rawValue)
+    let blockLimit = 64 * 1024
+    var bufferSize = Swift.max(sourceSize, 64)
+
+    if sourceSize > blockLimit {
+        bufferSize = blockLimit
+        if config.algorithm == COMPRESSION_LZFSE && config.operation != COMPRESSION_STREAM_ENCODE   {
+            // This fixes a bug in Apples lzfse decompressor. it will sometimes fail randomly when the input gets 
+            // splitted into multiple chunks and the flag is not 0. Even though it should always work with FINALIZE...
+            flags = 0
+        }
+    }
+
     let buffer = UnsafeMutablePointer<UInt8>.allocate(capacity: bufferSize)
     defer { buffer.deallocate() }
     
@@ -480,20 +493,21 @@ fileprivate func perform(_ config: Config, source: UnsafePointer<UInt8>, sourceS
     stream.src_ptr  = source
     stream.src_size = sourceSize
     
-    var res = preload
-    let flags: Int32 = Int32(COMPRESSION_STREAM_FINALIZE.rawValue)
-    
     while true {
         switch compression_stream_process(&stream, flags) {
             case COMPRESSION_STATUS_OK:
                 guard stream.dst_size == 0 else { return nil }
-                res.append(buffer, count: stream.dst_ptr - buffer)
+                result.append(buffer, count: stream.dst_ptr - buffer)
                 stream.dst_ptr = buffer
                 stream.dst_size = bufferSize
+
+                if flags == 0 && stream.src_size == 0 { // part of the lzfse bugfix above
+                    flags = Int32(COMPRESSION_STREAM_FINALIZE.rawValue)
+                }
                 
             case COMPRESSION_STATUS_END:
-                res.append(buffer, count: stream.dst_ptr - buffer)
-                return res
+                result.append(buffer, count: stream.dst_ptr - buffer)
+                return result
                 
             default:
                 return nil

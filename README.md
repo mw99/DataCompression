@@ -21,6 +21,7 @@
 #### Swift version support
 | Library Version | Swift Version |
 |-----------------|---------------|
+| 3.7.0           | 5.1 (Xcode 11)|
 | 3.5.0           | 5.0           |
 | 3.1.0           | 4.2           |
 | 3.0.0           | 3.0 -> 4.1    |
@@ -175,10 +176,10 @@ let package = Package(
 
 You then will need to add `import DataCompression` at the top of your swift source files to use the extension.
 
-The next time you run `swift build`, the new dependencies will be resolved. Since the swift package manager still does not allow packages to define their minimum deployment target, you will have to define these on the command line. I expect this to be fixed in a future release of the swift package manager.
+The next time you run `swift build`, the new dependencies will be resolved. 
 
 ```bash
-$ swift build -Xswiftc -target -Xswiftc x86_64-apple-macosx10.11
+$ swift build
 ```
 
 
@@ -189,6 +190,11 @@ You only need one file located at `Sources/DataCompression.swift`. Drag and drop
 
 ## Change log / Upgrading guide
 
+
+##### Version `3.5.0` to `3.6.0`
+- Target platforms finally added to the SPM Package file
+- Carthage support improved
+- Support for Xcode 11 SPM integration
 
 ##### Version `3.4.0` to `3.5.0`
 - Fix that prevents a bug in Apples lzfse compressor when working with large chunks of data.

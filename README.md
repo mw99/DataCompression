@@ -21,7 +21,7 @@
 #### Swift version support
 | Library Version | Swift Version |
 |-----------------|---------------|
-| 3.7.0           | 5.1 (Xcode 11)|
+| 3.6.0           | 5.1 (Xcode 11)|
 | 3.5.0           | 5.0           |
 | 3.1.0           | 4.2           |
 | 3.0.0           | 3.0 -> 4.1    |

@@ -183,7 +183,7 @@ public extension Data
     /// - returns: uncompressed data
     func gunzip() -> Data?
     {
-        // 10 byte header + data +  8 byte footer. See https://tools.ietf.org/html/rfc1952#section-2
+        // 10 byte header + data + 8 byte footer. See https://tools.ietf.org/html/rfc1952#section-2
         let overhead = 10 + 8
         guard count >= overhead else { return nil }
         
@@ -195,17 +195,15 @@ public extension Data
             // +---+---+---+---+---+---+---+---+---+---+
             return (id1: ptr[0], id2: ptr[1], cm: ptr[2], flg: ptr[3], xfl: ptr[8], os: ptr[9])
         }
-        
+
         typealias GZipFooter = (crc32: UInt32, isize: UInt32)
-        let ftr: GZipFooter = withUnsafeBytes { (bptr: UnsafePointer<UInt8>) -> GZipFooter in
+        let ftr: GZipFooter = advanced(by: count - 8).withUnsafeBytes { (ptr: UnsafePointer<UInt32>) -> GZipFooter in
             // +---+---+---+---+---+---+---+---+
             // |     CRC32     |     ISIZE     |
             // +---+---+---+---+---+---+---+---+
-            return bptr.advanced(by: count - 8).withMemoryRebound(to: UInt32.self, capacity: 2) { ptr in
-                return (ptr[0].littleEndian, ptr[1].littleEndian)
-            }
+            return (ptr[0].littleEndian, ptr[1].littleEndian)
         }
-        
+
         // Wrong gzip magic or unsupported compression method
         guard hdr.id1 == 0x1f && hdr.id2 == 0x8b && hdr.cm == 0x08 else { return nil }
         

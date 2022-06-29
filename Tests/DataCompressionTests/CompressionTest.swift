@@ -283,5 +283,31 @@ class CompressionTest: XCTestCase
     {
         XCTAssertEqual(CompressionTest.blob16mb, CompressionTest.blob16mb.lzfse_delzfse())
     }
+
+    func testGzipCrcFail()
+    {
+        let b = 1024 * 16
+        let ints = [UInt32](repeating: 0xcafeabee, count: b / 4)
+        var zipped_blob = Data(bytes: ints, count: b).gzip()!
+
+        let wrong_crc = Data(bytes: [0xcafeabee], count: 1)
+        let range = (zipped_blob.count - 8)..<(zipped_blob.count - 4)
+        zipped_blob.replaceSubrange(range, with: wrong_crc)
+
+        XCTAssertNil(zipped_blob.gunzip())
+    }
+
+    func testGzipISizeFail()
+    {
+        let b = 1024 * 16
+        let ints = [UInt32](repeating: 0xcafeabee, count: b / 4)
+        var zipped_blob = Data(bytes: ints, count: b).gzip()!
+
+        let wrong_isize = Data(bytes: [0xcafeabee], count: 1)
+        let range = (zipped_blob.count - 4)..<(zipped_blob.count)
+        zipped_blob.replaceSubrange(range, with: wrong_isize)
+
+        XCTAssertNil(zipped_blob.gunzip())
+    }
 }
 

@@ -30,5 +30,7 @@ extension CompressionTest
         ("testRandomDataBlob_16MB_lz4_delz4", testRandomDataBlob_16MB_lz4_delz4),
         ("testRandomDataBlob_16MB_lzma_delzma", testRandomDataBlob_16MB_lzma_delzma),
         ("testRandomDataBlob_16MB_lzfse_delzfse", testRandomDataBlob_16MB_lzfse_delzfse),
+        ("testGzipCrcFail", testGzipCrcFail),
+        ("testGzipISizeFail", testGzipISizeFail),
     ]
 }

@@ -122,7 +122,7 @@ public extension Data
         let header: UInt16 = withUnsafeBytes { (ptr: UnsafePointer<UInt16>) -> UInt16 in
             return ptr.pointee.bigEndian
         }
-        
+
         // check for the deflate stream bit
         guard header >> 8 & 0b1111 == 0b1000 else { return nil }
         // check the header checksum
@@ -137,14 +137,11 @@ public extension Data
         guard let inflated = cresult else { return nil }
         
         if skipCheckSumValidation { return inflated }
-        
-        let cksum: UInt32 = withUnsafeBytes { (bytePtr: UnsafePointer<UInt8>) -> UInt32 in
-            let last = bytePtr.advanced(by: count - 4)
-            return last.withMemoryRebound(to: UInt32.self, capacity: 1) { (intPtr) -> UInt32 in
-                return intPtr.pointee.bigEndian
-            }
+
+        let cksum = Data(self.suffix(from: count - 4)).withUnsafeBytes { rawPtr in
+            return rawPtr.load(as: UInt32.self).bigEndian
         }
-        
+
         return cksum == inflated.adler32().checksum ? inflated : nil
     }
     
@@ -197,7 +194,8 @@ public extension Data
         }
 
         typealias GZipFooter = (crc32: UInt32, isize: UInt32)
-        let ftr: GZipFooter = advanced(by: count - 8).withUnsafeBytes { (ptr: UnsafePointer<UInt32>) -> GZipFooter in
+        let alignedFtr = Data(self.suffix(from: count - 8))
+        let ftr: GZipFooter = alignedFtr.withUnsafeBytes { (ptr: UnsafePointer<UInt32>) -> GZipFooter in
             // +---+---+---+---+---+---+---+---+
             // |     CRC32     |     ISIZE     |
             // +---+---+---+---+---+---+---+---+

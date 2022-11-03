@@ -18,7 +18,7 @@ extension Data
     func c_inflate()  -> Data? { let res: Data? = self.inflate(); XCTAssertNotNil(res, "\(#function) failed"); return res }
 
     func c_zip()      -> Data? { let res: Data? = self.zip();     XCTAssertNotNil(res, "\(#function) failed"); return res }
-    func c_unzip()    -> Data? { let res: Data? = self.unzip();   XCTAssertNotNil(res, "\(#function) failed"); return res }
+    func c_unzip()    -> Data? { let res: Data? = self.unzip(skipCheckSumValidation: false);   XCTAssertNotNil(res, "\(#function) failed"); return res }
 
     func c_gzip()     -> Data? { let res: Data? = self.gzip();     XCTAssertNotNil(res, "\(#function) failed"); return res }
     func c_gunzip()   -> Data? { let res: Data? = self.gunzip();   XCTAssertNotNil(res, "\(#function) failed"); return res }

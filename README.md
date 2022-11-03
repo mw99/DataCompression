@@ -21,7 +21,7 @@
 #### Swift version support
 | Library Version | Swift Version |
 |-----------------|---------------|
-| 3.7.0           | 5.7 (Xcode 14)|
+| 3.8.0           | 5.7 (Xcode 14)|
 | 3.6.0           | 5.1 (Xcode 11)|
 | 3.5.0           | 5.0           |
 | 3.1.0           | 4.2           |
@@ -190,6 +190,10 @@ You only need one file located at `Sources/DataCompression.swift`. Drag and drop
 
 
 ## Change log / Upgrading guide
+
+
+##### Version `3.7.0` to `3.8.0`
+- Solved a bug causing crashes when using `.unzip()`, because of unaligned pointer loading caused by internal changes in Swift 5.7.
 
 ##### Version `3.6.0` to `3.7.0`
 - Support for Xcode 14 with Swift 5.7

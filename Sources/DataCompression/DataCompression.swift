@@ -32,6 +32,35 @@ import Compression
 
 public extension Data
 {
+    
+    /// Identifies if data is zipped.
+    /// - returns: boolean
+    var isZip: Bool {
+        get {
+            // 2 byte header + 4 byte adler32 checksum
+            let overhead = 6
+            guard count > overhead else { return false }
+            
+            let header: UInt16 = withUnsafeBytes { (ptr: UnsafePointer<UInt16>) -> UInt16 in
+                return ptr.pointee.bigEndian
+            }
+            
+            // check for the deflate stream bit
+            guard header >> 8 & 0b1111 == 0b1000 else { return false }
+            // check the header checksum
+            guard header % 31 == 0 else { return false }
+            return true
+        }
+    }
+    
+    /// Identifies if data is gzipped.
+    /// - returns: boolean
+    var isGzip: Bool {
+        get {
+            return self.starts(with: [0x1f, 0x8b, 0x08])  // check magic number
+        }
+    }
+    
     /// Compresses the data.
     /// - parameter withAlgorithm: Compression algorithm to use. See the `CompressionAlgorithm` type
     /// - returns: compressed data

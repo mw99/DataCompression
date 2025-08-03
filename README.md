@@ -21,6 +21,7 @@
 #### Swift version support
 | Library Version | Swift Version |
 |-----------------|---------------|
+| 3.9.0           | 6+  (Xcode 16)|
 | 3.8.0           | 5.7 (Xcode 14)|
 | 3.6.0           | 5.1 (Xcode 11)|
 | 3.5.0           | 5.0           |
@@ -191,6 +192,10 @@ You only need one file located at `Sources/DataCompression.swift`. Drag and drop
 
 ## Change log / Upgrading guide
 
+
+##### Version `3.8.0` to `3.9.0`
+- Support for visionOS added.
+- All other platform support versions bumped in order to reduce compile time warnings.
 
 ##### Version `3.7.0` to `3.8.0`
 - Solved a bug causing crashes when using `.unzip()`, because of unaligned pointer loading caused by internal changes in Swift 5.7.

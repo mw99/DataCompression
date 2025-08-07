@@ -1,0 +1,41 @@
+name: Push Podspec to CocoaPods
+
+on:
+  workflow_dispatch:
+    inputs:
+      dryRun:
+        description: "Run in dry mode (only lint, no push)"
+        required: false
+        default: "false"
+  push:
+    tags:
+      - '[0-9]+.[0-9]+.[0-9]+'
+
+jobs:
+  push:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set dryRun from workflow_dispatch or default to false
+        id: set_dry_run
+        run: |
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            echo "dry_run=${{ github.event.inputs.dryRun }}" >> $GITHUB_OUTPUT
+          else
+            echo "dry_run=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Lint podspec (dry run)
+        if: ${{ steps.set_dry_run.outputs.dry_run == 'true' }}
+        run: |
+          pod lib lint DataCompression.podspec --allow-warnings --verbose
+
+      - name: Push to CocoaPods
+        if: ${{ steps.set_dry_run.outputs.dry_run == 'false' }}
+        env:
+          COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
+        run: |
+          pod trunk push DataCompression.podspec --allow-warnings --verbose

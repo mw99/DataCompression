@@ -47,15 +47,14 @@ extension String
 
 class CompressionTest: XCTestCase
 {
-    static var blob16mb: Data!
-
-    override class func setUp()
-    {
-        super.setUp()
-        let b = 1024 * 1024 * 16 // 16 MB
-        let ints = [UInt32](repeating: 0, count: b / 4).map { _ in arc4random() }
-        self.blob16mb = Data(bytes: ints, count: b)
-    }
+    static let blob16mb: Data = {
+        let byteCount = 1024 * 1024 * 16
+        var ints = [UInt32](repeating: 0, count: byteCount / 4)
+        for i in ints.indices {
+            ints[i] = arc4random()
+        }
+        return ints.withUnsafeBytes { Data($0) }
+    }()
 
     func testEmptyString()
     {

@@ -1,7 +1,7 @@
 
 extension CompressionTest
 {
-    static var allTests = [
+    static let allTests = [
         ("testEmptyString", testEmptyString),
         ("testEmptyData", testEmptyData),
         ("testAdler32", testAdler32),

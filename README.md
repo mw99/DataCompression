@@ -12,22 +12,25 @@
  * [LZ4](https://en.wikipedia.org/wiki/LZ4_(compression_algorithm))
 
 #### Requirements
- * iOS deployment target **>= 9.0**
- * macOS deployment target **>= 10.11**
- * tvOS deployment target **>= 9.0**
- * watchOS deployment target **>= 2.0**
+ * iOS deployment target **>= 15.0**
+ * macOS deployment target **>= 12.0**
+ * tvOS deployment target **>= 15.0**
+ * watchOS deployment target **>= 9.0**
+ * visionOS deployment target **>= 1.0**
+
 
 
 #### Swift version support
-| Library Version | Swift Version |
-|-----------------|---------------|
-| 3.9.0           | 6+  (Xcode 16)|
-| 3.8.0           | 5.7 (Xcode 14)|
-| 3.6.0           | 5.1 (Xcode 11)|
-| 3.5.0           | 5.0           |
-| 3.1.0           | 4.2           |
-| 3.0.0           | 3.0 -> 4.1    |
-| 2.0.1           | < 3.0         |
+| Library Version | Swift Version  |
+|-----------------|----------------|
+| 3.10.0          | 6.0  (Xcode 27)|
+| 3.9.0           | 5.9  (Xcode 16)|
+| 3.8.0           | 5.7  (Xcode 14)|
+| 3.6.0           | 5.1  (Xcode 11)|
+| 3.5.0           | 5.0            |
+| 3.1.0           | 4.2            |
+| 3.0.0           | 3.0 -> 4.1     |
+| 2.0.1           | < 3.0          |
 
 
 ## Usage example
@@ -192,6 +195,10 @@ You only need one file located at `Sources/DataCompression.swift`. Drag and drop
 
 ## Change log / Upgrading guide
 
+
+##### Version `3.9.0` to `3.10.0`
+- All other platform support versions bumped in order to reduce compile time warnings.
+- Test cases fixed to run with Swift version 6.
 
 ##### Version `3.8.0` to `3.9.0`
 - Support for visionOS added.
